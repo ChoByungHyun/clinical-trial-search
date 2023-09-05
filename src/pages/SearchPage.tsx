@@ -1,12 +1,12 @@
 import Title from "components/common/Title";
-import SerachBar from "components/domain/SerachBar";
+import SerachInput from "components/domain/SearchInput";
 import React from "react";
 
 const SearchPage = () => {
   return (
     <>
       <Title />
-      <SerachBar />
+      <SerachInput />
     </>
   );
 };
