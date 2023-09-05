@@ -21,6 +21,7 @@ https://brilliant-wisp-6c9680.netlify.app/
 
 ```
 npm install
+npm run server
 npm run start
 ```
 
