@@ -20,7 +20,7 @@ const SearchInput = () => {
   const [searchResults, setSearchResults] = useState<ClinicalTrialData[]>([]);
   const [searchValue, setSearchValue] = useState("");
   const [isFocused, setIsFocused] = useState(false);
-  // 디바운스 훅 사용
+
   const debouncedSearchValue = useDebounce(searchValue, DEBOUNCE_INTERVAL);
 
   useEffect(() => {
@@ -42,7 +42,6 @@ const SearchInput = () => {
   }, []);
 
   useEffect(() => {
-    // 디바운스된 검색어로 필터링
     if (clinicalTrialData && debouncedSearchValue.length > 0) {
       const filteredResults = clinicalTrialData.filter(
         (item: ClinicalTrialData) => item.sickNm.includes(debouncedSearchValue)
@@ -60,8 +59,14 @@ const SearchInput = () => {
     setIsFocused(false);
   }
   function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
-    setSearchValue(event.target.value);
+    const inputValue = event.target.value;
+    setSearchValue(inputValue);
     setIsFocused(true);
+    // 검색어가 띄어쓰기로 시작하는 경우 검색 결과 초기화 및 드롭박스 미표시
+    if (inputValue.trim() === "" || inputValue.startsWith(" ")) {
+      setSearchResults([]);
+      setIsFocused(false);
+    }
   }
   function handleSeachValueChange(str: string) {
     setSearchValue(str);
@@ -78,6 +83,7 @@ const SearchInput = () => {
         onBlur={handleInputBlur}
         value={searchValue}
         onChange={handleInputChange}
+        autoFocus
       />
       {isFocused && searchValue.length > 0 && (
         <RecommendDropDown
@@ -92,18 +98,29 @@ const SearchInput = () => {
         />
       )}
       {isFocused ? (
-        <SSearchIcon src={SearchIcon_Fill} alt="검색아이콘" />
+        <SSearchIcon
+          $isFocused={isFocused}
+          src={SearchIcon_Fill}
+          alt="검색아이콘"
+        />
       ) : (
-        <SSearchIcon src={SearchIcon} alt="검색아이콘" />
+        <SSearchIcon $isFocused={isFocused} src={SearchIcon} alt="검색아이콘" />
       )}
     </SLayout>
   );
 };
-const SSearchIcon = styled.img`
-  position: absolute;
-  left: 95%;
-  bottom: 30%;
-  width: 24px;
+const SSearchIcon = styled.img<{ $isFocused: boolean }>`
+  height: 100%;
+  border: 1px solid #e6e6e6;
+  transition: 0.2s all;
+  box-sizing: border-box;
+  border-radius: 6px;
+  background-color: ${(props) =>
+    props.$isFocused ? "var(--gray-400)" : "var(--gray-200)"};
+  box-shadow: ${(props) =>
+    props.$isFocused
+      ? "0px 0px 0px 0px"
+      : "0px 4px 4px 0px rgba(0, 0, 0, 0.25)"};
   cursor: pointer;
 `;
 
