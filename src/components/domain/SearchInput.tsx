@@ -3,9 +3,10 @@ import styled from "styled-components";
 import SearchIcon from "assets/search-icon.svg";
 import SearchIcon_Fill from "assets/search-fill-icon.svg";
 
-import { CACHE_EXPIRY_MS } from "constants/searchConst";
+import { CACHE_EXPIRY_MS, DEBOUNCE_INTERVAL } from "constants/searchConst";
 import RecommendDropDown from "./RecommendDropDown";
 import { fetchData } from "util/fetchData";
+import { useDebounce } from "hooks/useDebounce";
 
 interface ClinicalTrialData {
   sickCd: string;
@@ -19,6 +20,8 @@ const SearchInput = () => {
   const [searchResults, setSearchResults] = useState<ClinicalTrialData[]>([]);
   const [searchValue, setSearchValue] = useState("");
   const [isFocused, setIsFocused] = useState(false);
+  // 디바운스 훅 사용
+  const debouncedSearchValue = useDebounce(searchValue, DEBOUNCE_INTERVAL);
 
   useEffect(() => {
     async function fetchDataAndUpdateState() {
@@ -39,13 +42,15 @@ const SearchInput = () => {
   }, []);
 
   useEffect(() => {
-    if (clinicalTrialData) {
+    // 디바운스된 검색어로 필터링
+    if (clinicalTrialData && debouncedSearchValue.length > 0) {
       const filteredResults = clinicalTrialData.filter(
-        (item: ClinicalTrialData) => item.sickNm.includes(searchValue)
+        (item: ClinicalTrialData) => item.sickNm.includes(debouncedSearchValue)
       );
+
       setSearchResults(filteredResults);
     }
-  }, [searchValue, clinicalTrialData]);
+  }, [debouncedSearchValue, clinicalTrialData]);
 
   function handleInputFocus() {
     setIsFocused(true);
@@ -56,9 +61,11 @@ const SearchInput = () => {
   }
   function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
     setSearchValue(event.target.value);
+    setIsFocused(true);
   }
   function handleSeachValueChange(str: string) {
     setSearchValue(str);
+    setIsFocused(false);
   }
 
   return (
@@ -75,6 +82,7 @@ const SearchInput = () => {
       {isFocused && searchValue.length > 0 && (
         <RecommendDropDown
           searchResults={searchResults}
+          searchValue={searchValue}
           isFocused={isFocused}
           handleSeachValueChange={handleSeachValueChange}
           handleDropdownClick={(index) => {

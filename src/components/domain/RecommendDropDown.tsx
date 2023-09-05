@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
-
+import HighlightedText from "components/common/HighLightText";
 // Interface for ClinicalTrialData
 interface ClinicalTrialData {
   sickCd: string;
@@ -11,6 +11,7 @@ interface ClinicalTrialData {
 interface DropdownProps {
   searchResults: ClinicalTrialData[];
   isFocused: boolean;
+  searchValue: string;
   handleDropdownClick: (index: number) => void;
   handleSeachValueChange: (str: string) => void;
 }
@@ -20,6 +21,7 @@ const RecommendDropDown: React.FC<DropdownProps> = ({
   handleDropdownClick,
   isFocused,
   handleSeachValueChange,
+  searchValue,
 }) => {
   const dropdownRef = useRef<HTMLDivElement | null>(null);
   const [selectedIndex, setSelectedIndex] = useState(-1);
@@ -63,29 +65,38 @@ const RecommendDropDown: React.FC<DropdownProps> = ({
 
   return (
     <SDropdown ref={dropdownRef}>
-      {searchResults.map((result, index) => (
-        <SDropdownOption
-          key={index}
-          onMouseDown={(e) => {
-            e.preventDefault();
-          }}
-          onClick={() => {
-            handleDropdownClick(index);
-          }}
-          $isSelected={index === selectedIndex}
-          className={
-            index === selectedIndex
-              ? "dropdown-option active-option"
-              : "dropdown-option"
-          }
-        >
-          {result.sickNm}
+      {searchResults.length === 0 ? (
+        <SDropdownOption $isEmpty $isSelected={false}>
+          {"검색어가 없습니다"}
         </SDropdownOption>
-      ))}
+      ) : (
+        searchResults.map((result, index) => (
+          <SDropdownOption
+            key={index}
+            $isEmpty={result.sickNm === ""}
+            onMouseDown={(e) => {
+              e.preventDefault();
+            }}
+            onClick={() => {
+              handleDropdownClick(index);
+            }}
+            $isSelected={index === selectedIndex}
+            className={
+              index === selectedIndex
+                ? "dropdown-option active-option"
+                : "dropdown-option"
+            }
+          >
+            <HighlightedText
+              text={result.sickNm}
+              searchValue={searchValue}
+            ></HighlightedText>
+          </SDropdownOption>
+        ))
+      )}
     </SDropdown>
   );
 };
-
 const SDropdown = styled.div`
   position: absolute;
   top: 100%;
@@ -100,10 +111,11 @@ const SDropdown = styled.div`
 `;
 
 const SHighlight = styled.span`
-  color: #f68e1d;
+  color: orange;
 `;
 interface SDropdownOptionProps {
   $isSelected: boolean;
+  $isEmpty: boolean;
 }
 
 const SDropdownOption = styled.div<SDropdownOptionProps>`
@@ -120,6 +132,11 @@ const SDropdownOption = styled.div<SDropdownOptionProps>`
     background-color: #f9f9f9;
     font-weight: bold;
   `}
-`;
 
+  ${(props) =>
+    props.$isEmpty &&
+    `
+    color: #999; // 그레이색으로 스타일링
+  `}
+`;
 export default RecommendDropDown;
