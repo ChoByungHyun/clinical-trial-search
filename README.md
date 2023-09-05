@@ -13,17 +13,29 @@ db.json에 있는 데이터로 json-server를 통해 임상시험 정보를 검�
   - [📂 폴더 구조](#-폴더-구조)
   - [🛠️ 기술 스택](#️-기술-스택)
 
-## 🔗 배포 링크
 
-https://brilliant-wisp-6c9680.netlify.app/
 
 ## ⚙️ 실행 방법
-
+#### 현재 레포 clone 후 로컬실행
 ```
+git clone https://github.com/ChoByungHyun/clinical-trial-search.git
 npm install
 npm run server
 npm run start
 ```
+
+#### 서버 레포 clone 후 배포링크 접속
+```
+git clone https://github.com/walking-sunset/assignment-api
+npm install
+npm start
+
+배포링크 접속
+```
+
+## 🔗 배포 링크
+
+https://brilliant-wisp-6c9680.netlify.app/
 
 ## 🧰 기술 전략
 
