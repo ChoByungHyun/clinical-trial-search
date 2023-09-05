@@ -1,46 +1,79 @@
-# Getting Started with Create React App
+# 임상시험 정보 검색
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+db.json에 있는 데이터로 json-server를 통해 임상시험 정보를 검색하는 프로젝트입니다.
 
-## Available Scripts
+# 목차
 
-In the project directory, you can run:
+- [clinical-trial-search](#clinical-trial-search)
+- [목차](#목차)
+  - [🔗 배포 링크](#-배포-링크)
+  - [⚙️ 실행 방법](#️-실행-방법)
+  - [⌛ 진행 과정](#-진행-과정)
+    - [회의 및 기록](#회의-및-기록)
+  - [📂 폴더 구조](#-폴더-구조)
+  - [🛠️ 기술 스택](#️-기술-스택)
 
-### `npm start`
+## 🔗 배포 링크
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+https://brilliant-wisp-6c9680.netlify.app/
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## ⚙️ 실행 방법
 
-### `npm test`
+```
+npm install
+npm run start
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## 🧰 기술 전략
 
-### `npm run build`
+#### 입력마다 API 호출하지 않도록 API 호출 횟수를 줄이는 전략
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- 최초 랜더링 시 데이터를 로컬스토리지에 저장하여 사용, 검색어 입력 시 useDebounce 훅으로 데이터접근 최소화.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+#### API 호출별로 로컬 캐싱 구현
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- API 호출 시 데이터와 Date.now() 데이터를 로컬스토리지에 저장.
+- 정상 호출 시 setInterval를 통해 지정한 expire time(10분)에 맞게 타이머 시작.
+- 타이머에 맞게 로컬스토리지 초기화 및 API 재요청 후 다시 데이터 저장.
 
-### `npm run eject`
+#### 키보드만으로 추천 검색어들로 이동 가능하도록 구현
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+- `window.addEventListener,keydown`을 통해 드롭박스를 방향키로 이동 가능 및 엔터키로 검색 가능하도록 구현.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## 📂 폴더 구조
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+```
+project-root/
+│
+├── public/ # 정적 파일들
+│ ├── index.html
+│ └── manifest.json
+│
+├── src/ # 소스 코드
+│ ├── components/    # 재사용 컴포넌트들
+│ ├── hooks/         # custom hooks
+│ ├── api/           # api 함수들
+│ ├── pages/         # 페이지별 컴포넌트
+│ ├── router/        # 라우팅
+| ├── util/          # 유틸함수들
+│ ├── App.tsx        # App 컴포넌트
+│ ├── index.tsx      # 진입점 파일
+│ └── GlobalStyle.ts # 전역 스타일 설정파일
+│
+├── .env
+├── .gitignore
+├── .prettierrc.js
+├── .eslintrc
+├── package.json
+├── tsconfig.json
+└── README.md
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
-## Learn More
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## 🛠️ 기술 스택
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+<img src="https://img.shields.io/badge/Typescript-blue?style=square"/> 
+<img src="https://img.shields.io/badge/React-61DAFB?style=flat-square&logo=React&logoColor=white"/> 
+<img src="https://img.shields.io/badge/styledcomponents-DB7093?style=flat-square&logo=styled-components&logoColor=white"/> <img src="https://img.shields.io/badge/GitHub-181717?style=flat-square&logo=GitHub&logoColor=white"/>
+<img src="https://img.shields.io/badge/git-F05032?style=flat&logo=git&logoColor=white">
