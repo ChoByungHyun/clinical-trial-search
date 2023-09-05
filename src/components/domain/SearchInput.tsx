@@ -44,7 +44,11 @@ const SearchInput = () => {
   useEffect(() => {
     if (clinicalTrialData && debouncedSearchValue.length > 0) {
       const filteredResults = clinicalTrialData.filter(
-        (item: ClinicalTrialData) => item.sickNm.includes(debouncedSearchValue)
+        (item: ClinicalTrialData) =>
+          //띄어쓰기없이 검색 정규식
+          item.sickNm
+            .replace(/\s+/g, "")
+            .includes(debouncedSearchValue.replace(/\s+/g, ""))
       );
 
       setSearchResults(filteredResults);
@@ -62,11 +66,6 @@ const SearchInput = () => {
     const inputValue = event.target.value;
     setSearchValue(inputValue);
     setIsFocused(true);
-    // 검색어가 띄어쓰기로 시작하는 경우 검색 결과 초기화 및 드롭박스 미표시
-    if (inputValue.trim() === "" || inputValue.startsWith(" ")) {
-      setSearchResults([]);
-      setIsFocused(false);
-    }
   }
   function handleSeachValueChange(str: string) {
     setSearchValue(str);
@@ -112,7 +111,6 @@ const SearchInput = () => {
 const SSearchIcon = styled.img<{ $isFocused: boolean }>`
   height: 100%;
   border: 1px solid #e6e6e6;
-  transition: 0.2s all;
   box-sizing: border-box;
   border-radius: 6px;
   background-color: ${(props) =>

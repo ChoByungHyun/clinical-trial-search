@@ -65,7 +65,7 @@ const RecommendDropDown: React.FC<DropdownProps> = ({
 
   return (
     <SDropdown ref={dropdownRef}>
-      {searchResults.length === 0 ? (
+      {searchResults.length === 0 || searchValue.trim() === "" ? (
         <SDropdownOption $isEmpty $isSelected={false}>
           {"검색어가 없습니다"}
         </SDropdownOption>
@@ -110,9 +110,6 @@ const SDropdown = styled.div`
   z-index: 1;
 `;
 
-const SHighlight = styled.span`
-  color: orange;
-`;
 interface SDropdownOptionProps {
   $isSelected: boolean;
   $isEmpty: boolean;
