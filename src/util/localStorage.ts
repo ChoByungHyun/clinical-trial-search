@@ -1,9 +1,9 @@
 const setCachedData = (key: string, data: any) => {
-  localStorage.setItem(key, JSON.stringify(data));
+  sessionStorage.setItem(key, JSON.stringify(data));
 };
 
 const getCachedData = (key: string) => {
-  const cachedData = localStorage.getItem(key);
+  const cachedData = sessionStorage.getItem(key);
   if (cachedData) {
     return JSON.parse(cachedData);
   }
