@@ -9,8 +9,8 @@ const getClinicalTrial = async (searchValue: string) => {
       ENDPOINT_SICK + `?q=${searchValue}`
     );
     const data = response.data;
-    const deadTime = Date.now();
-    const responseData = { data, deadTime };
+    const timestamp = Date.now();
+    const responseData = { data, timestamp };
     console.info("calling api");
 
     return responseData;

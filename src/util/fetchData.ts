@@ -5,7 +5,7 @@ import getClinicalTrial from "api/getClinicalTrial";
 export async function fetchData(searchValue: string) {
   const cachedData = getCachedData(searchValue);
 
-  if (!cachedData || isCacheExpired(cachedData.deadTime, CACHE_EXPIRY_MS)) {
+  if (!cachedData || isCacheExpired(cachedData.timestamp, CACHE_EXPIRY_MS)) {
     try {
       const response = await getClinicalTrial(searchValue);
       const newData = response; // 응답에서 data 속성이 유효한지 확인

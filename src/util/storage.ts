@@ -15,10 +15,6 @@ const getCachedData = (key: string) => {
 };
 
 const isCacheExpired = (timestamp: number, expiryMs: number) => {
-  console.log(
-    "🚀 ~ file: storage.ts:27 ~ isCacheExpired ~ Date.now() - timestamp > expiryMs:",
-    Date.now() - timestamp > expiryMs
-  );
   return Date.now() - timestamp > expiryMs;
 };
 export { setCachedData, getCachedData, isCacheExpired };
