@@ -13,10 +13,10 @@ db.json에 있는 데이터로 json-server를 통해 임상시험 정보를 검�
   - [📂 폴더 구조](#-폴더-구조)
   - [🛠️ 기술 스택](#️-기술-스택)
 
-
-
 ## ⚙️ 실행 방법
+
 #### 현재 레포 clone 후 로컬실행
+
 ```
 git clone https://github.com/ChoByungHyun/clinical-trial-search.git
 npm install
@@ -25,6 +25,7 @@ npm run start
 ```
 
 #### 서버 레포 clone 후 배포링크 접속
+
 ```
 git clone https://github.com/walking-sunset/assignment-api
 npm install
@@ -41,13 +42,14 @@ https://brilliant-wisp-6c9680.netlify.app/
 
 #### 입력마다 API 호출하지 않도록 API 호출 횟수를 줄이는 전략
 
-- 최초 랜더링 시 데이터를 로컬스토리지에 저장하여 사용, 검색어 입력 시 useDebounce 훅으로 데이터접근 최소화.
+- 검색어 입력 시 useDebounce 훅으로 400ms이내에 입력이 들어오면 API호출하지 않도록 구현
+- 띄어쓰기나 영어, 숫자, 특수문자로 검색 시 API호출 안되도록 방지
 
 #### API 호출별로 로컬 캐싱 구현
 
-- API 호출 시 데이터와 Date.now() 데이터를 로컬스토리지에 저장.
-- 정상 호출 시 setInterval를 통해 지정한 expire time(10분)에 맞게 타이머 시작.
-- 타이머에 맞게 로컬스토리지 초기화 및 API 재요청 후 다시 데이터 저장.
+- API 호출 시 검색어 별로 데이터와 Date.now()값을 객체형태로 세션스토리지에 저장.
+- 이전에 입력한 검색어와 같은 검색어를 입력 시 `Date.now() - timestamp > expiryMs;` 식을 통해 캐시데이터가 stale한지 확인 후 API호출 여부를 정하고 stale하다면 API호출을 하고 값을 업데이트 해주고 최신상태라면 갖고 있다면 기존 데이터를 반환하도록 구현.
+- 설정한 stale로 전환되는 시간은 10분(`1000*60*10`)
 
 #### 키보드만으로 추천 검색어들로 이동 가능하도록 구현
 
