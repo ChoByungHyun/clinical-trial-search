@@ -1,15 +1,16 @@
-import React from "react";
-import axios from "axios";
+import { CACHE_EXPIRY_MS } from "constants/searchConst";
 import axiosInstance from "./axiosInstance";
 
 const ENDPOINT_SICK = "/sick";
 
-const getClinicalTrial = async () => {
+const getClinicalTrial = async (searchValue: string) => {
   try {
-    const response = await axiosInstance.get(ENDPOINT_SICK);
+    const response = await axiosInstance.get(
+      ENDPOINT_SICK + `?q=${searchValue}`
+    );
     const data = response.data;
-    const timestamp = Date.now();
-    const responseData = { data, timestamp };
+    const deadTime = Date.now();
+    const responseData = { data, deadTime };
     console.info("calling api");
 
     return responseData;

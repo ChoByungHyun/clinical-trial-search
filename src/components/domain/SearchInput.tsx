@@ -12,7 +12,9 @@ interface ClinicalTrialData {
   sickCd: string;
   sickNm: string;
 }
-
+const isAlphaNumeric = (input: string): boolean => /^[a-zA-Z0-9]+$/.test(input); //영어, 숫자 제외 정규식
+const containsSpecialCharacter = (input: string): boolean =>
+  /[!@#$%^&*()_+{}\[\]:;<>,.?~\\-]/.test(input);
 const SearchInput = () => {
   const [clinicalTrialData, setClinicalTrialData] = useState<
     ClinicalTrialData[]
@@ -25,21 +27,24 @@ const SearchInput = () => {
 
   useEffect(() => {
     async function fetchDataAndUpdateState() {
-      const data = await fetchData();
+      if (
+        searchValue.trim() === "" ||
+        isAlphaNumeric(searchValue) ||
+        containsSpecialCharacter(searchValue)
+      ) {
+        // 검색어가 이상할때 api요청 막음
+        setClinicalTrialData([]);
+        return;
+      }
+      const data = await fetchData(searchValue);
       if (data) {
         setClinicalTrialData(data);
       }
     }
-    fetchDataAndUpdateState();
-
-    const refreshInterval = setInterval(() => {
+    if (searchValue.length !== 0) {
       fetchDataAndUpdateState();
-    }, CACHE_EXPIRY_MS);
-
-    return () => {
-      clearInterval(refreshInterval);
-    };
-  }, []);
+    }
+  }, [debouncedSearchValue]);
 
   useEffect(() => {
     if (clinicalTrialData && debouncedSearchValue.length > 0) {
