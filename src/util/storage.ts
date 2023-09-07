@@ -1,4 +1,4 @@
-import { STORAGE_KEY } from "constants/searchConst";
+import { CACHE_EXPIRY_MS, STORAGE_KEY } from "constants/searchConst";
 
 const setCachedData = (key: string, data: any) => {
   const cachedData = JSON.parse(sessionStorage.getItem(STORAGE_KEY) || "{}");
@@ -14,7 +14,7 @@ const getCachedData = (key: string) => {
   return null;
 };
 
-const isCacheExpired = (timestamp: number, expiryMs: number) => {
-  return Date.now() - timestamp > expiryMs;
+const isCacheExpired = (timestamp: number) => {
+  return Date.now() - timestamp > CACHE_EXPIRY_MS;
 };
 export { setCachedData, getCachedData, isCacheExpired };
