@@ -14,7 +14,7 @@ db.json에 있는 데이터로 json-server를 통해 임상시험 정보를 검�
   - [🛠️ 기술 스택](#️-기술-스택)
 
 ## 실행 화면
-<img width="560" alt="main_image" src="https://github.com/ChoByungHyun/time-series-chart/assets/102468625/3baceafa-c36d-42cb-8be4-7da6a0c03e4c">
+<img width="560" src="https://github.com/ChoByungHyun/time-series-chart/assets/102468625/3baceafa-c36d-42cb-8be4-7da6a0c03e4c" alt="main_image">
 
 ## ⚙️ 실행 방법
 
