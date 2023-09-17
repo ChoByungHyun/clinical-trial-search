@@ -13,6 +13,9 @@ db.json에 있는 데이터로 json-server를 통해 임상시험 정보를 검�
   - [📂 폴더 구조](#-폴더-구조)
   - [🛠️ 기술 스택](#️-기술-스택)
 
+## 실행 화면
+<img width="560" alt="main_image" src="https://github.com/ChoByungHyun/time-series-chart/assets/102468625/3baceafa-c36d-42cb-8be4-7da6a0c03e4c">
+
 ## ⚙️ 실행 방법
 
 #### 현재 레포 clone 후 로컬실행
