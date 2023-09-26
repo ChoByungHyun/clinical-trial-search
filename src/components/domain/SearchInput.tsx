@@ -28,15 +28,15 @@ const SearchInput = () => {
   useEffect(() => {
     async function fetchDataAndUpdateState() {
       if (
-        searchValue.trim() === "" ||
-        isAlphaNumeric(searchValue) ||
-        containsSpecialCharacter(searchValue)
+        debouncedSearchValue.trim() === "" ||
+        isAlphaNumeric(debouncedSearchValue) ||
+        containsSpecialCharacter(debouncedSearchValue)
       ) {
         // 검색어가 이상할때 api요청 막음
         setClinicalTrialData([]);
         return;
       }
-      const data = await fetchData(searchValue);
+      const data = await fetchData(debouncedSearchValue);
       if (data) {
         setClinicalTrialData(data);
       }
@@ -47,13 +47,10 @@ const SearchInput = () => {
   }, [debouncedSearchValue]);
 
   useEffect(() => {
+    // 디바운스된 검색어로 필터링
     if (clinicalTrialData && debouncedSearchValue.length > 0) {
       const filteredResults = clinicalTrialData.filter(
-        (item: ClinicalTrialData) =>
-          //띄어쓰기없이 검색 정규식
-          item.sickNm
-            .replace(/\s+/g, "")
-            .includes(debouncedSearchValue.replace(/\s+/g, ""))
+        (item: ClinicalTrialData) => item.sickNm.includes(debouncedSearchValue)
       );
 
       setSearchResults(filteredResults);

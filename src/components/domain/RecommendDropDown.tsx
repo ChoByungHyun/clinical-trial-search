@@ -81,11 +81,7 @@ const RecommendDropDown: React.FC<DropdownProps> = ({
               handleDropdownClick(index);
             }}
             $isSelected={index === selectedIndex}
-            className={
-              index === selectedIndex
-                ? "dropdown-option active-option"
-                : "dropdown-option"
-            }
+            className={index === selectedIndex ? " active-option" : ""}
           >
             <HighlightedText
               text={result.sickNm}
